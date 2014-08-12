@@ -1,7 +1,7 @@
 sstapi
 ======
 
-a 3rd party api for [ifeng fm][http://diantai.ifeng.com/]
+a 3rd party api for [ifeng fm](http://diantai.ifeng.com/)
 
 
 ### Install
