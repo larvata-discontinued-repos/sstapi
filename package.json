@@ -1,0 +1,36 @@
+{
+  "name": "sstapi",
+  "version": "0.0.2",
+  "description": "a 3rd-party ifeng fm api",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/larvata/sstapi.git"
+  },
+  "keywords": [
+    "ifeng",
+    "api",
+    "3rd-party"
+  ],
+  "author": "Larvata <alzzlnewtype@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/larvata/sstapi/issues"
+  },
+  "homepage": "https://github.com/larvata/sstapi",
+  "devDependencies": {
+    "chai": "^1.9.1",
+    "grunt": "^0.4.5",
+    "grunt-contrib-coffee": "^0.11.0",
+    "mocha": "^1.21.4"
+  },
+  "dependencies": {
+    "request": "^2.40.0"
+  }
+}
