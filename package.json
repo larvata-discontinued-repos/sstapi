@@ -1,6 +1,6 @@
 {
   "name": "sstapi",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "a 3rd-party ifeng fm api",
   "main": "index.js",
   "directories": {
@@ -28,6 +28,7 @@
     "chai": "^1.9.1",
     "grunt": "^0.4.5",
     "grunt-contrib-coffee": "^0.11.0",
+    "grunt-contrib-watch": "^0.6.1",
     "mocha": "^1.21.4"
   },
   "dependencies": {

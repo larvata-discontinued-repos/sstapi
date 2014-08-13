@@ -10,12 +10,6 @@ class sstapi
 		@version_name='5.3.1'
 		@platform='android'
 
-		@defaultCallback=(err,res,body)->
-			if !err and res.statusCode is 200
-				fs.writeFile './_lastcallback.json',body,(err)->
-					if err
-						console.log err
-
 		@getSignData=()->
 			common_key='sstifengcom'
 			signTemplate='devicename=%srtime=%splatform=%sv=%s%s'
@@ -23,10 +17,10 @@ class sstapi
 			rtime=new Date().getTime()
 			signText=util.format(signTemplate,@devicename,rtime,@platform,@version_name,common_key)
 			sign=crypto.createHash('md5').update(signText).digest('hex')
-			return {
+			return{
 				sign:  sign
 				rtime: rtime
-				}
+			}
 
 		@postRequest=(url,form,callback)->
 			headers={
@@ -41,52 +35,86 @@ class sstapi
 			form['rtime']=sd.rtime
 			form['sign']=sd.sign
 
-			options={
+			options=
 				url:     url
 				method:  'POST'
 				headers: headers
 				form:    form
-			}
 
-			if callback?
-				request options,@callbackWrap(callback)
-			else
-				# default callback for debug
-				request options,(err,res,body)=>
-					@defaultCallback(err,res,body)
+			# decrypt filepath
 
-		@callbackWrap=(callback)->
-			(err,res,body)->
+			console.log "sesese"
+			request options, @callbackWrap(callback)
+
+		@defaultCallback=(err,body)->
+			fs.writeFile './_lastcallback.json',body,(err)->
+				if err
+					console.log err
+				else
+					console.log "json saved"
+
+		@callbackWrap=(callback)=>
+			if !callback?
+				callback=@defaultCallback
+
+			(err,res,body)=>
 				obj={}
 				if !err and res.statusCode is 200
+					console.log "dec"
+
 					obj=JSON.parse(body)
+					obj=@filepathDecrypt(obj)
+
 				callback(err,obj)
 
 
+		@filepathDecrypt=(obj)->
+			sstutil.objectLoop(obj)
 
+
+	# 索引列表
+	# channel
+	# 	channelId
+	# 	channelname
+	# 	categoryId
+	# 	fixed
+	# 	show
 
 	getIndex:(callback)->
 		url='http://diantai.ifeng.com/api/sstApi.php?action=getIndex'
 		sd=@getSignData()
 
-		form={
-		}
+		form={}
+		console.log callback
 
 		@postRequest(url,form,callback)
 
 
-	getNewProgramList:(channelid,page,callback)->
+	# 节目列表
+	# totalCount
+	# list
+	# 	isfav
+	# 	programId
+	# 	programname
+	# 	compere
+	# 	info
+	# 	channelname
+	# 	isreplace
+	# 	programlogo
+	# 	title
+	# 	create_at
+	getNewProgramList:(channelid,categoryid,page,callback)->
 		url='http://diantai.ifeng.com/api/sstApi.php?action=getNewProgramList5.3'
 		sd=@getSignData()
 
-		form={
+		form=
 			channelid:   channelid
+			categoryid:  categoryid
 			# page index start from 1
 			page:        page
 			percount:    20
 			# const
 			tags:        2
-		}
 
 		@postRequest(url,form,callback)
 
@@ -95,7 +123,7 @@ class sstapi
 		url='http://diantai.ifeng.com/api/sstApi.php?action=getProgramAudio5.3'
 		sd=@getSignData()
 
-		form={
+		form=
 			programid:   programid
 			# page index start from 1
 			page:        page
@@ -105,8 +133,10 @@ class sstapi
 			order:       order
 			# 0:not-fetch-info 1:fetch-info
 			needinfo:    needinfo
-		}
+
 		@postRequest(url,form,callback)
 
 
 module.exports=sstapi
+
+

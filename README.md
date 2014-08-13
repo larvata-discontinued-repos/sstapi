@@ -20,6 +20,8 @@ a 3rd party api for [ifeng fm](http://diantai.ifeng.com/)
 		console.log(obj);
 	});
 
-### Test
+### Develop & Unit Test
 
+	git clone https://github.com/larvata/sstapi.git
+	cd sstapi
 	npm test
