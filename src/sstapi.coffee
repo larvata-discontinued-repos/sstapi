@@ -246,9 +246,12 @@ class sstapi
 		url="http://diantai.ifeng.com/api/sstApi.php?action=getTvEpgList"
 
 		form =
+			devicename: @devicename
 			tvid:  2
 
-		@postRequest(url,form,callback)
+		signlist=['devicename']
+
+		@postRequest(url,form,signlist,callback)
 
 	getTvNowEpg:(callback)->
 		url="http://diantai.ifeng.com/api/sstApi.php?action=getTvNowEpg"

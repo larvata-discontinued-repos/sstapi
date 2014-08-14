@@ -232,4 +232,10 @@ describe 'sstapi', ()->
 	# 			done()
 
 
-	
+	describe 'getTvEpgList',()->
+		it 'should fetch tv epg list',(done)->
+			@timeout(tryTime)
+
+			tvid=2
+
+			api.getTvEpgList tvid
