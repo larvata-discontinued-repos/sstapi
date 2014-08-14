@@ -16,7 +16,7 @@ class sstapi
 		}
 
 		@apiRequest=request.defaults(
-				'proxy':'http://127.0.0.1:8888'
+				# 'proxy':'http://127.0.0.1:8888'
 				method:  'POST'
 				headers: headers
 			)
