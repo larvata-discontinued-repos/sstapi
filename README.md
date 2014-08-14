@@ -12,7 +12,7 @@ a 3rd party api for [ifeng fm](http://diantai.ifeng.com/)
 
 	var sstapi = require('sstapi');
 
-	// get it from your mobile or fake it
+	// get IMEI from your mobile or just fake it
 	var imei='353043056516027';
 	var api = new sstapi(imei);
 

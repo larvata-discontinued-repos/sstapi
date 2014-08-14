@@ -1,62 +1,47 @@
 should = require('chai').should()
-
+fs = require 'fs'
 sstapi = require '../lib/sstapi'
 sstutil = require '../lib/util'
 
 # testdeviceid
 api=new sstapi('363033156546107')
 
-describe 'util', ()->
-	describe '.decryptAudioUrl()', ()->
-		it 'should return an valid uri', ()->
+tryTime=4000
 
+# describe 'util', ()->
+	# describe '.decryptAudioUrl()', ()->
+	# 	it 'should return an valid uri', ()->
 
-			# 长度非108
-			# s2="7SvNBlIq7u6kf00JcbYydvFetjYFi9EQhewJj9W00Momp41TeT/IuS92Dg2kpejGICz+qMYB50gBDdYl/Oj0tDmZGKRVor2VaJR2Tt3+1i8yIs3G0Api4w=="
-			# k="49485"
-			# console.log "length: #{s2.length}"
-			# p=sstutil.decryptAudioUrl(s2,k)
-			# console.log p
+	# 		encryptedUrl='yvxqCpB1YpWQUgcccjWMgc+WCc1Uxf+ACMN+XgWgyvNxSZuAkvOrzaDy47r2Zgm1VC1LIQP7r5bqk9eg7A1DqZqjr26OOwKVgc/6Qx3LoNw=';
+	# 		audioId='192975'
+	# 		plainUrl='http://fm.ifengcdn.com/userfiles/audio01/2014/04/12/1829887-535-066-0251.mp3'
+	# 		plainUrlDecrypted=sstutil.decryptAudioUrl(encryptedUrl,audioId)
 
-
-			# 长度非108
-			# s2="s9diScdIS3TqbVlCvINZf6FW+FfQOvyCL3nVws6KPyI1mrwYT7V7D6WKOJSoeP5dirjFAJ257UYQ0LsJkAXF93hca2IWo1H2yGnQULa8vgY="
-			# k="522398"
-			# console.log "length: #{s2.length}"
-			# p=sstutil.decryptAudioUrl(s2,k)
-			# console.log p
-
-			# encryptedUrl='yvxqCpB1YpWQUgcccjWMgc+WCc1Uxf+ACMN+XgWgyvNxSZuAkvOrzaDy47r2Zgm1VC1LIQP7r5bqk9eg7A1DqZqjr26OOwKVgc/6Qx3LoNw=';
-			# audioId='192975'
-			# plainUrl='http://fm.ifengcdn.com/userfiles/audio01/2014/04/12/1829887-535-066-0251.mp3'
-			# plainUrlDecrypted=sstutil.decryptAudioUrl(encryptedUrl,audioId)
-
-			# plainUrlDecrypted.should.equal(plainUrl)
+	# 		plainUrlDecrypted.should.equal(plainUrl)
 
 
 
 describe 'sstapi', ()->
-	describe '.getIndex()', ()->
-		it 'should fetch a catalogy', (done)->
-			@timeout(4000)
-			api.getIndex()
-			api.getIndex (err,obj)->
-				should.not.exist err
-				should.exist obj
+	# describe '.getIndex()', ()->
+	# 	it 'should fetch a catalogy', (done)->
+	# 		@timeout(tryTime)
+	# 		# api.getIndex()
+	# 		api.getIndex (err,obj)->
+	# 			should.not.exist err
+	# 			should.exist obj
 
-				data=obj.data
+	# 			data=obj.data
+	# 			should.exist(data)
+	# 			should.exist(data.channel)
+	# 			should.exist(data.focus)
+	# 			should.exist(data.tv)
+	# 			should.exist(data.slabs)
 
-				should.exist(data)
-				should.exist(data.channel)
-				should.exist(data.focus)
-				should.exist(data.tv)
-				should.exist(data.slabs)
-
-				done()
+	# 			done()
 
 	# describe '.getNewProgramList()', ()->
 	# 	it 'should fetch a programlist', (done)->
-	# 		@timeout(6000)
+	# 		@timeout(tryTime)
 
 	# 		# channel: 新闻
 	# 		channelId = 1
@@ -79,7 +64,7 @@ describe 'sstapi', ()->
 
 	# describe '.getProgramAudio()', ()->
 	# 	it	'should fetch a audio list',(done)->
-	# 		@timeout(4000)
+	# 		@timeout(tryTime)
 
 	# 		# 总编辑时间
 	# 		programId=16
@@ -87,18 +72,164 @@ describe 'sstapi', ()->
 	# 		order=1
 	# 		needInfo= 1
 
-	# 		api.getProgramAudio programId,page,order,needInfo
+	# 		api.getProgramAudio programId,page,20,order,needInfo,(err,obj)->
+	# 			should.not.exist err
+	# 			should.exist obj
+	# 			data=obj.data
+	# 			should.exist data
+	# 			should.exist data.totalCount
+	# 			should.exist data.programinfo
+	# 			should.exist data.audiolist
 
-			# api.getProgramAudio programId,page,order,needInfo,(err,obj)->
-			# 	should.not.exist err
-			# 	should.exist obj
+	# 			# fs.writeFileSync './_lastcallback.json',JSON.stringify(obj)
 
-			# 	data=obj.data
+	# 			done()
 
-			# 	should.exist data
-			# 	should.exist data.totalCount
-			# 	should.exist data.programinfo
-			# 	should.exist data.audiolist
+	# describe 'getCategoryList()', ()->
+	# 	it 'should fetch a category',(done)->
+	# 		@timeout(tryTime)
 
-			# 	done()
+	# 		categoryId=3
+	# 		page=1
+	# 		perCount=20
 
+	# 		api.getCategoryList categoryId,page,perCount,(err,obj)->
+	# 			should.not.exist err
+	# 			should.exist obj
+
+	# 			data=obj.data
+
+	# 			should.exist data
+	# 			should.exist data.totalCount
+	# 			should.exist data.list
+	# 			done()
+
+	# describe 'getAudioBooks()',()->
+	# 	it 'should fetch audio book list',(done)->
+	# 		@timeout(tryTime)
+
+	# 		channelId=52
+	# 		page=1
+	# 		perCount=20
+
+	# 		api.getAudioBooks channelId,page,perCount,(err,obj)->
+	# 			should.not.exist err
+	# 			should.exist obj
+
+	# 			data=obj.data
+
+	# 			should.exist data
+	# 			should.exist data.totalCount
+	# 			should.exist data.list
+	# 			done()
+
+	# describe 'getOpenClassList()',()->
+	# 	it 'should fetch open class list',(done)->
+	# 		@timeout(tryTime)
+
+	# 		channelId=37
+	# 		page=1
+	# 		perCount=20
+
+	# 		api.getOpenClassList channelId,page,perCount,(err,obj)->
+	# 			should.not.exist err
+	# 			should.exist obj
+
+	# 			data=obj.data
+
+	# 			should.exist data
+	# 			should.exist data.totalCount
+	# 			should.exist data.list
+	# 			done()
+
+	# describe 'getMusicCategory()',()->
+	# 	it 'should fetch music category',(done)->
+	# 		@timeout(tryTime)
+
+	# 		categoryId=1
+
+	# 		api.getMusicCategory categoryId ,(err,obj)->
+
+	# 			should.not.exist err
+	# 			should.exist obj
+
+	# 			data=obj.data
+
+	# 			should.exist data
+	# 			done()
+
+	# describe 'getSinglerList()',()->
+	# 	it 'should fetch singer list',(done)->
+	# 		@timeout(tryTime)
+
+	# 		categoryId=1
+
+	# 		api.getSinglerList categoryId ,(err,obj)->
+
+	# 			should.not.exist err
+	# 			should.exist obj
+
+	# 			data=obj.data
+
+	# 			should.exist data
+	# 			done()
+
+	# describe 'getSongList()',()->
+	# 	it 'should fetch song list',(done)->
+	# 		@timeout(tryTime)
+
+	# 		type="singer"
+	# 		id=116
+	# 		page=1
+	# 		pageCount=20
+
+	# 		api.getSongList type,id,page,pageCount,(err,obj)->
+	# 			should.not.exist err
+	# 			should.exist obj
+
+	# 			data=obj.data
+
+	# 			should.exist data
+	# 			should.exist data.totalCount
+	# 			should.exist data.list
+	# 			done()
+
+	# describe 'getSongByThemeId()',()->
+	# 	it 'should fetch song list by theme id',(done)->
+	# 		@timeout(tryTime)
+
+	# 		themeId=62
+
+	# 		api.getSongByThemeId themeId,(err,obj)->
+	# 			should.not.exist err
+	# 			should.exist obj
+
+	# 			data=obj.data
+
+	# 			should.exist data
+	# 			should.exist data.totalCount
+	# 			should.exist data.list
+	# 			done()
+
+
+	# describe 'getTvList()',()->
+	# 	it 'should fetch tv list',(done)->
+	# 		@timeout(tryTime)
+
+	# 		type=1
+	# 		page=1
+	# 		pageCount=20
+
+	# 		api.getTvList type,page,pageCount,(err,obj)->
+	# 			should.not.exist err
+	# 			should.exist obj
+
+	# 			data=obj.data
+
+	# 			should.exist data
+	# 			should.exist data.totalCount
+	# 			should.exist data.tvList
+	# 			done()
+
+
+	

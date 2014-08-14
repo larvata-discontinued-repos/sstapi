@@ -1,6 +1,6 @@
 {
   "name": "sstapi",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "a 3rd-party ifeng fm api",
   "main": "index.js",
   "directories": {

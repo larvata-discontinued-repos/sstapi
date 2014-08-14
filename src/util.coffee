@@ -1,4 +1,6 @@
 crypto = require 'crypto'
+util = require 'util'
+fs = require 'fs'
 
 @changeChar=(charCode)->
 	if 65 <= charCode <= 90
@@ -76,11 +78,6 @@ crypto = require 'crypto'
 	for i in [0...len]
 		changedArray.push(@changeChar(encryptedUrl[i].charCodeAt(0)))
 
-	console.log changedArray.toString()
-	# for i in [0...seg]
-	# 	piece = changedArray.splice(0,4)
-	# 	convertedArray=convertedArray.concat(@segmentDecode(piece))
-
 	piece=[]
 	for i in [0...len]
 		if changedArray[i] is -1
@@ -95,13 +92,6 @@ crypto = require 'crypto'
 	if piece.length>0
 		convertedArray=convertedArray.concat(@segmentDecode(piece))
 
-
-	console.log len
-	console.log convertedArray.toString()
-	# convertedArray.splice(-1)
-	console.log ""
-	# console.log "==================="
-	# console.log convertedArray
 	return convertedArray
 
 
@@ -127,8 +117,15 @@ module.exports.decryptAudioUrl=(encryptedUrl,audioId)->
 
 	decipher = crypto.createDecipheriv('des-ede3-cbc', key, '20110512');
 
-	plainText = decipher.update(hexedUrl, 'hex', 'utf8')
-	plainText += decipher.final('utf8')
+	plainText=''
+
+	try
+		plainText = decipher.update(hexedUrl, 'hex', 'utf8')
+		plainText += decipher.final('utf8')
+	catch e
+		# decrypt failed
+
+
 	return plainText
 
 module.exports.objectLoop=(v, k) ->
@@ -137,20 +134,21 @@ module.exports.objectLoop=(v, k) ->
 			if Object.hasOwnProperty.call(v, kp)
 				q= kp
 				q= "#{k}.#{kp}" if k?
-				# console.log this
 				@objectLoop v[kp], q
 			else
-		if v.filepath?
-			console.log v.filepath
-			console.log v.audio[0].audioid
-			# s1="s9diScdIS3TqbVlCvINZf6FW+FfQOvyCL3nVws6KPyI1mrwYT7V7D6WKOJSoeP5dirjFAJ257UYQ0LsJkAXF93hca2IWo1H2yGnQULa8vgY="
-			# s2="s9diScdIS3TqbVlCvINZf6FW+FfQOvyCL3nVws6KPyI1mrwYT7V7D6WKOJSoeP5dirjFAJ257UYQ0LsJkAXF93hca2IWo1H2yGnQULa8vgY="
-			# k="522398"
-			if v.filepath.length is 120
-				return
-				# ...
-			
-			console.log @decryptAudioUrl(v.filepath,v.audio[0].audioid)
-			# console.log @decryptAudioUrl(s2,k)
+		if v? and v.filepath?
+			plainText=@decryptAudioUrl(v.filepath,v.audio[0].audioid)
+			if plainText is ''
+				# decrypt failed log to file
+				logTemplate='encryptedUrl: %s\nkey: %s\nlength: %s\n\n'
+				logText=util.format(logTemplate,v.filepath,v.audio[0].audioid,v.filepath.length)
 
+				@writeLog('./_decryptfailed',logText)
+			else
+				# decrypt success
+
+			v.filepath=plainText
 	return
+
+@writeLog=(filePath,text)->
+	fs.appendFileSync filePath,text
