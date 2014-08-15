@@ -1,6 +1,6 @@
 {
   "name": "sstapi",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "description": "a 3rd-party ifeng fm api",
   "main": "index.js",
   "directories": {
@@ -32,6 +32,7 @@
     "mocha": "^1.21.4"
   },
   "dependencies": {
-    "request": "^2.40.0"
+    "request": "^2.40.0",
+    "superagent": "^0.18.2"
   }
 }

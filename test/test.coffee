@@ -28,7 +28,6 @@ describe 'sstapi', ()->
 			@timeout(tryTime)
 			# api.getIndex()
 			api.getIndex (obj)->
-				# except(obj).to.exist
 				should.exist(obj)
 				data=obj.data
 				should.exist(data)
