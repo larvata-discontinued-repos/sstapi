@@ -8,6 +8,7 @@ api=new sstapi('363033156546107')
 
 tryTime=6000
 
+
 describe 'util', ()->
 	describe '.decryptAudioUrl()', ()->
 		it 'should return an valid uri', ()->
@@ -26,10 +27,9 @@ describe 'sstapi', ()->
 		it 'should fetch a catalogy', (done)->
 			@timeout(tryTime)
 			# api.getIndex()
-			api.getIndex (err,obj)->
-				should.not.exist err
-				should.exist obj
-
+			api.getIndex (obj)->
+				# except(obj).to.exist
+				should.exist(obj)
 				data=obj.data
 				should.exist(data)
 				should.exist(data.channel)
@@ -50,8 +50,7 @@ describe 'sstapi', ()->
 			page = 1
 			perCount=20
 
-			api.getNewProgramList channelId,categoryId,page,perCount,(err,obj)->
-				should.not.exist err
+			api.getNewProgramList channelId,categoryId,page,perCount,(obj)->
 				should.exist obj
 
 				data=obj.data
@@ -72,8 +71,7 @@ describe 'sstapi', ()->
 			order=1
 			needInfo= 1
 
-			api.getProgramAudio programId,page,20,order,needInfo,(err,obj)->
-				should.not.exist err
+			api.getProgramAudio programId,page,20,order,needInfo,(obj)->
 				should.exist obj
 				data=obj.data
 				should.exist data
@@ -93,8 +91,7 @@ describe 'sstapi', ()->
 			page=1
 			perCount=20
 
-			api.getCategoryList categoryId,page,perCount,(err,obj)->
-				should.not.exist err
+			api.getCategoryList categoryId,page,perCount,(obj)->
 				should.exist obj
 
 				data=obj.data
@@ -112,8 +109,7 @@ describe 'sstapi', ()->
 			page=1
 			perCount=20
 
-			api.getAudioBooks channelId,page,perCount,(err,obj)->
-				should.not.exist err
+			api.getAudioBooks channelId,page,perCount,(obj)->
 				should.exist obj
 
 				data=obj.data
@@ -131,8 +127,7 @@ describe 'sstapi', ()->
 			page=1
 			perCount=20
 
-			api.getOpenClassList channelId,page,perCount,(err,obj)->
-				should.not.exist err
+			api.getOpenClassList channelId,page,perCount,(obj)->
 				should.exist obj
 
 				data=obj.data
@@ -148,9 +143,8 @@ describe 'sstapi', ()->
 
 			categoryId=1
 
-			api.getMusicCategory categoryId ,(err,obj)->
+			api.getMusicCategory categoryId ,(obj)->
 
-				should.not.exist err
 				should.exist obj
 
 				data=obj.data
@@ -158,15 +152,14 @@ describe 'sstapi', ()->
 				should.exist data
 				done()
 
-	describe 'getSinglerList()',()->
+	describe 'getSingerList()',()->
 		it 'should fetch singer list',(done)->
 			@timeout(tryTime)
 
 			categoryId=1
 
-			api.getSinglerList categoryId ,(err,obj)->
 
-				should.not.exist err
+			api.getSingerList categoryId ,(obj)->
 				should.exist obj
 
 				data=obj.data
@@ -183,8 +176,7 @@ describe 'sstapi', ()->
 			page=1
 			perCount=20
 
-			api.getSongList type,id,page,perCount,(err,obj)->
-				should.not.exist err
+			api.getSongList type,id,page,perCount,(obj)->
 				should.exist obj
 
 				data=obj.data
@@ -200,8 +192,7 @@ describe 'sstapi', ()->
 
 			themeId=62
 
-			api.getSongByThemeId themeId,(err,obj)->
-				should.not.exist err
+			api.getSongByThemeId themeId,(obj)->
 				should.exist obj
 
 				data=obj.data
@@ -220,8 +211,7 @@ describe 'sstapi', ()->
 			page=1
 			perCount=20
 
-			api.getTvList type,page,perCount,(err,obj)->
-				should.not.exist err
+			api.getTvList type,page,perCount,(obj)->
 				should.exist obj
 
 				data=obj.data
@@ -238,8 +228,7 @@ describe 'sstapi', ()->
 
 			tvid=2
 
-			api.getTvEpgList tvid,(err,obj)->
-				should.not.exist err
+			api.getTvEpgList tvid,(obj)->
 				should.exist obj
 
 				data=obj.data
@@ -255,8 +244,7 @@ describe 'sstapi', ()->
 
 			tvid=2
 
-			api.getTvNowEpg tvid,(err,obj)->
-				should.not.exist err
+			api.getTvNowEpg tvid,(obj)->
 				should.exist obj
 
 				data=obj.data
@@ -279,8 +267,7 @@ describe 'sstapi', ()->
 			tvid=2
 			shownum=20
 
-			api.getTvRelevantList type,tvid,shownum,(err,obj)->
-				should.not.exist err
+			api.getTvRelevantList type,tvid,shownum,(obj)->
 				should.exist obj
 
 				data=obj.data
@@ -293,8 +280,7 @@ describe 'sstapi', ()->
 		it 'should fetch tv cat pos',(done)->
 			@timeout(tryTime)
 
-			api.getTvCatAndPos (err,obj)->
-				should.not.exist err
+			api.getTvCatAndPos (obj)->
 				should.exist obj
 
 				data=obj.data
@@ -311,8 +297,7 @@ describe 'sstapi', ()->
 			categoryId=1
 			perCount=20
 
-			api.getRankingByCategoryId categoryId,perCount,(err,obj)->
-				should.not.exist err
+			api.getRankingByCategoryId categoryId,perCount,(obj)->
 				should.exist obj
 
 				data=obj.data
@@ -328,8 +313,7 @@ describe 'sstapi', ()->
 			page=1
 			perCount=20
 
-			api.getSpecialList page,perCount,(err,obj)->
-				should.not.exist err
+			api.getSpecialList page,perCount,(obj)->
 				should.exist obj
 
 				data=obj.data
@@ -346,8 +330,7 @@ describe 'sstapi', ()->
 			page=1
 			perCount=20
 
-			api.getSpecialAudioList themeId,page,perCount,(err,obj)->
-				should.not.exist err
+			api.getSpecialAudioList themeId,page,perCount,(obj)->
 				should.exist obj
 
 				data=obj.data

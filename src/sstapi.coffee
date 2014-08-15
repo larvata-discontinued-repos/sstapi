@@ -1,5 +1,5 @@
 util = require 'util'
-request = require 'request'
+request = require('superagent')
 fs = require 'fs'
 crypto = require 'crypto'
 
@@ -9,17 +9,14 @@ class sstapi
 	constructor: (@devicename) ->
 		@version_name='5.3.1'
 		@platform='android'
+		@apiUrl='http://diantai.ifeng.com/api/sstApi.php'
 
-		headers={
+		@headers={
 			'Content-Type': 'application/x-www-form-urlencoded'
 			'User-Agent': 'Apache-HttpClient/UNAVAILABLE (java 1.4)'
 		}
 
-		@apiRequest=request.defaults(
-				# 'proxy':'http://127.0.0.1:8888'
-				method:  'POST'
-				headers: headers
-			)
+		@request=request
 
 		@formSignture=(form,signlist)->
 			common_key='sstifengcom'
@@ -40,19 +37,22 @@ class sstapi
 
 			return form
 
-		@postRequest=(url,form,signlist,callback)->
+		@postRequest=(action,form,signlist,callback)->
 
 			form=@formSignture(form,signlist)
 
-			options=
-				url:     url
-				form:    form
+			request
+				.post(@apiUrl)
+				.set(@headers)
+				.query({"action",action})
+				.send(form)
+				.end @callbackWrap(callback)
 
-			@apiRequest options, @callbackWrap(callback)
 
-		@defaultCallback=(err,obj)->
 
-			fs.writeFile './_lastcallback.json',JSON.stringify(obj),(err)->
+		@defaultCallback=(bodyObj)->
+
+			fs.writeFile './_lastcallback.json',JSON.stringify(bodyObj),(err)->
 				if err
 					console.log err
 				else
@@ -63,14 +63,14 @@ class sstapi
 			if !callback?
 				callback=@defaultCallback
 
-			(err,res,body)=>
+			(res)=>
 
 				obj={}
-				if !err and res.statusCode is 200
-					obj=JSON.parse(body)
+				if res.status is 200
+					obj=JSON.parse(res.text)
 					@filepathDecrypt(obj)
 
-				callback(err,obj)
+				callback(obj)
 
 		@filepathDecrypt=(obj)->
 			sstutil.objectLoop(obj)
@@ -85,14 +85,14 @@ class sstapi
 	# 	show
 
 	getIndex:(callback)->
-		url='http://diantai.ifeng.com/api/sstApi.php?action=getIndex'
+		action='getIndex'
 
 		form=
 			devicename: @devicename
 
 		signlist=["devicename"]
 
-		@postRequest(url,form,signlist,callback)
+		@postRequest(action,form,signlist,callback)
 
 
 	# 节目列表
@@ -109,7 +109,7 @@ class sstapi
 	# 	title
 	# 	create_at
 	getNewProgramList:(channelId,categoryid,page,perCount,callback)->
-		url='http://diantai.ifeng.com/api/sstApi.php?action=getNewProgramList5.3'
+		action='getNewProgramList5.3'
 
 		form=
 			devicename:  @devicename
@@ -123,11 +123,11 @@ class sstapi
 
 		signlist=["devicename"]
 
-		@postRequest(url,form,signlist,callback)
+		@postRequest(action,form,signlist,callback)
 
 	# 节目音频
 	getProgramAudio:(programId,page,perCount,order,needinfo,callback)->
-		url='http://diantai.ifeng.com/api/sstApi.php?action=getProgramAudio5.3'
+		action='getProgramAudio5.3'
 
 		form=
 			devicename:  @devicename
@@ -143,11 +143,11 @@ class sstapi
 
 		signlist=["devicename"]
 
-		@postRequest(url,form,signlist,callback)
+		@postRequest(action,form,signlist,callback)
 
 
 	getCategoryList:(categoryId,page,perCount,callback)->
-		url='http://diantai.ifeng.com/api/sstApi.php?action=getCategoryList'
+		action='getCategoryList'
 
 		form =
 			# from getIndex().categoryid
@@ -158,10 +158,10 @@ class sstapi
 
 		signlist=['categoryid','page']
 
-		@postRequest(url,form,signlist,callback)
+		@postRequest(action,form,signlist,callback)
 
 	getAudioBooks:(channelId,page,perCount,callback)->
-		url='http://diantai.ifeng.com/api/sstApi.php?action=getAudioBooks'
+		action='getAudioBooks'
 
 		form =
 			# form getCategoryList().categoryid
@@ -171,11 +171,10 @@ class sstapi
 			tags:       2
 
 		signlist=['channelid','page','percount']
-		@postRequest(url,form,signlist,callback)
-
+		@postRequest(action,form,signlist,callback)
 
 	getOpenClassList:(channelId,page,perCount,callback)->
-		url="http://diantai.ifeng.com/api/sstApi.php?action=getOpenClassList"
+		action="getOpenClassList"
 
 		form =
 			channelid:  channelId
@@ -184,30 +183,29 @@ class sstapi
 			tags:       2
 
 		signlist=['channelid','page','percount']
-		@postRequest(url,form,signlist,callback)
+		@postRequest(action,form,signlist,callback)
 
 	getMusicCategory:(categoryId,callback)->
-		url="http://diantai.ifeng.com/api/sstApi.php?action=getMusicCategory"
+		action="getMusicCategory"
 
 		form =
 			categoryid: categoryId
 
 		signlist=['categoryid']
-		@postRequest(url,form,signlist,callback)
+		@postRequest(action,form,signlist,callback)
 
-
-	getSinglerList:(categoryId,callback)->
-		url="http://diantai.ifeng.com/api/sstApi.php?action=getSingerList"
+	getSingerList:(categoryId,callback)->
+		action="getSingerList"
 
 		form =
 			categoryid: categoryId
 
 		signlist=['categoryid']
 
-		@postRequest(url,form,signlist,callback)
+		@postRequest(action,form,signlist,callback)
 
 	getSongList:(type,id,page,perCount,callback)->
-		url="http://diantai.ifeng.com/api/sstApi.php?action=getSongList"
+		action="getSongList"
 
 		form =
 			type:       type
@@ -217,20 +215,20 @@ class sstapi
 
 		signlist=['type','id']
 
-		@postRequest(url,form,signlist,callback)
+		@postRequest(action,form,signlist,callback)
 
 	getSongByThemeId:(themeId,callback)->
-		url="http://diantai.ifeng.com/api/sstApi.php?action=getSongBythemeid"
+		action="getSongBythemeid"
 
 		form =
 			themeid:  themeId
 
 		signlist=['themeid']
 
-		@postRequest(url,form,signlist,callback)
+		@postRequest(action,form,signlist,callback)
 
 	getTvList:(type,page,perCount,callback)->
-		url="http://diantai.ifeng.com/api/sstApi.php?action=getTvList"
+		action="getTvList"
 
 		form =
 			devicename: @devicename
@@ -240,10 +238,10 @@ class sstapi
 
 		signlist=['devicename']
 
-		@postRequest(url,form,signlist,callback)
+		@postRequest(action,form,signlist,callback)
 
 	getTvEpgList:(tvid,callback)->
-		url="http://diantai.ifeng.com/api/sstApi.php?action=getTvEpgList"
+		action="getTvEpgList"
 
 		form =
 			devicename: @devicename
@@ -251,10 +249,10 @@ class sstapi
 
 		signlist=['devicename']
 
-		@postRequest(url,form,signlist,callback)
+		@postRequest(action,form,signlist,callback)
 
 	getTvNowEpg:(tvid,callback)->
-		url="http://diantai.ifeng.com/api/sstApi.php?action=getTvNowEpg"
+		action="getTvNowEpg"
 
 		form =
 			devicename: @devicename
@@ -262,10 +260,10 @@ class sstapi
 
 		signlist=['devicename']
 
-		@postRequest(url,form,signlist,callback)
+		@postRequest(action,form,signlist,callback)
 
 	getTvRelevantList:(type,tvId,showNum,callback)->
-		url="http://diantai.ifeng.com/api/sstApi.php?action=getTvRelevantList"
+		action="getTvRelevantList"
 
 		form =
 			devicename:  @devicename
@@ -275,20 +273,20 @@ class sstapi
 
 		signlist=['devicename']
 
-		@postRequest(url,form,signlist,callback)
+		@postRequest(action,form,signlist,callback)
 
 	getTvCatAndPos:(callback)->
-		url="http://diantai.ifeng.com/api/sstApi.php?action=getTvCatAndPos"
+		action="getTvCatAndPos"
 
 		form =
 			devicename:  @devicename
 
 		signlist=['devicename']
 
-		@postRequest(url,form,signlist,callback)
+		@postRequest(action,form,signlist,callback)
 
 	getRankingByCategoryId:(categoryId,perCount,callback)->
-		url="http://diantai.ifeng.com/api/sstApi.php?action=getRankingByCategoryid"
+		action="getRankingByCategoryid"
 
 		form =
 			devicename:  @devicename
@@ -297,10 +295,10 @@ class sstapi
 
 		signlist=['devicename']
 
-		@postRequest(url,form,signlist,callback)
+		@postRequest(action,form,signlist,callback)
 
 	getSpecialList:(page,perCount,callback)->
-		url="http://diantai.ifeng.com/api/sstApi.php?action=getSpecialList"
+		action="getSpecialList"
 
 		form =
 			devicename:  @devicename
@@ -309,10 +307,10 @@ class sstapi
 
 		signlist=['devicename']
 
-		@postRequest(url,form,signlist,callback)
+		@postRequest(action,form,signlist,callback)
 
 	getSpecialAudioList:(themeId,page,perCount,callback)->
-		url="http://diantai.ifeng.com/api/sstApi.php?action=getSpecialAudioList"
+		action="getSpecialAudioList"
 
 		form =
 			devicename:  @devicename
@@ -322,7 +320,7 @@ class sstapi
 
 		signlist=['devicename']
 
-		@postRequest(url,form,signlist,callback)
+		@postRequest(action,form,signlist,callback)
 
 
 module.exports=sstapi
