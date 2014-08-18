@@ -9,6 +9,9 @@ api=new sstapi('363033156546107')
 tryTime=6000
 
 writeLog=(filename,data)->
+	if !fs.existsSync('./log')
+		fs.mkdirSync('./log')
+
 	fs.writeFileSync("./log/#{filename}.json",data)
 
 

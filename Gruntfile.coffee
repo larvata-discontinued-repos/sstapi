@@ -5,6 +5,7 @@ module.exports = (grunt)->
 			compile:
 				files:
 					"./index.js": "./index.coffee"
+					"./test/test.js": "./test/test.coffee"
 
 			glob_to_multiple:
 				expand: true,
@@ -17,7 +18,7 @@ module.exports = (grunt)->
 		watch:
 			files: ['./src/*.coffee']
 			tasks: ['coffee']
-			
+
 	grunt.loadNpmTasks('grunt-contrib-coffee')
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.registerTask('default',['coffee'])
