@@ -1,7 +1,9 @@
 sstapi
 ======
- 
+
 [![NPM IMAGE]][NPM]
+[![TRAVIS IMAGE]][TRAVIS]
+
 
 a 3rd party api for [ifeng fm](http://diantai.ifeng.com/)
 
@@ -28,3 +30,10 @@ a 3rd party api for [ifeng fm](http://diantai.ifeng.com/)
 	cd sstapi
 	grunt
 	npm test
+
+
+[NPM]:          https://www.npmjs.org/package/sstapi
+[NPM IMAGE]:    https://badge.fury.io/js/sstapi.svg
+
+[TRAVIS]:       https://travis-ci.org/larvata/sstapi
+[TRAVIS IMAGE]: https://travis-ci.org/larvata/sstapi.svg
