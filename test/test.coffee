@@ -8,6 +8,9 @@ api=new sstapi('363033156546107')
 
 tryTime=6000
 
+writeLog=(filename,data)->
+	fs.writeFileSync("./log/#{filename}.json",data)
+
 
 describe 'util', ()->
 	describe '.decryptAudioUrl()', ()->
@@ -35,7 +38,7 @@ describe 'sstapi', ()->
 				should.exist(data.focus)
 				should.exist(data.tv)
 				should.exist(data.slabs)
-
+				writeLog("getIndex",JSON.stringify(obj))
 				done()
 
 	describe '.getNewProgramList()', ()->
@@ -57,7 +60,7 @@ describe 'sstapi', ()->
 				should.exist data
 				should.exist data.totalCount
 				should.exist data.list
-
+				writeLog("getNewProgramList",JSON.stringify(obj))
 				done()
 
 	describe '.getProgramAudio()', ()->
@@ -77,7 +80,7 @@ describe 'sstapi', ()->
 				should.exist data.totalCount
 				should.exist data.programinfo
 				should.exist data.audiolist
-
+				writeLog("getProgramAudio",JSON.stringify(obj))
 				# fs.writeFileSync './_lastcallback.json',JSON.stringify(obj)
 
 				done()
@@ -98,6 +101,8 @@ describe 'sstapi', ()->
 				should.exist data
 				should.exist data.totalCount
 				should.exist data.list
+
+				writeLog("getCategoryList",JSON.stringify(obj))
 				done()
 
 	describe 'getAudioBooks()',()->
@@ -116,6 +121,9 @@ describe 'sstapi', ()->
 				should.exist data
 				should.exist data.totalCount
 				should.exist data.list
+
+
+				writeLog("getAudioBooks",JSON.stringify(obj))
 				done()
 
 	describe 'getOpenClassList()',()->
@@ -134,6 +142,8 @@ describe 'sstapi', ()->
 				should.exist data
 				should.exist data.totalCount
 				should.exist data.list
+
+				writeLog("getOpenClassList",JSON.stringify(obj))
 				done()
 
 	describe 'getMusicCategory()',()->
@@ -149,6 +159,8 @@ describe 'sstapi', ()->
 				data=obj.data
 
 				should.exist data
+
+				writeLog("getMusicCategory",JSON.stringify(obj))
 				done()
 
 	describe 'getSingerList()',()->
@@ -164,6 +176,8 @@ describe 'sstapi', ()->
 				data=obj.data
 
 				should.exist data
+
+				writeLog("getSingerList",JSON.stringify(obj))
 				done()
 
 	describe 'getSongList()',()->
@@ -183,6 +197,8 @@ describe 'sstapi', ()->
 				should.exist data
 				should.exist data.totalCount
 				should.exist data.list
+
+				writeLog("getSongList",JSON.stringify(obj))
 				done()
 
 	describe 'getSongByThemeId()',()->
@@ -199,6 +215,8 @@ describe 'sstapi', ()->
 				should.exist data
 				should.exist data.totalCount
 				should.exist data.list
+
+				writeLog("getSongByThemeId",JSON.stringify(obj))
 				done()
 
 
@@ -218,6 +236,8 @@ describe 'sstapi', ()->
 				should.exist data
 				should.exist data.totalCount
 				should.exist data.tvList
+
+				writeLog("getTvList",JSON.stringify(obj))
 				done()
 
 
@@ -234,6 +254,8 @@ describe 'sstapi', ()->
 
 				should.exist data
 				should.exist data.epgList
+
+				writeLog("getTvEpgList",JSON.stringify(obj))
 				done()
 
 
@@ -255,6 +277,8 @@ describe 'sstapi', ()->
 				should.exist data.nextepg
 				should.exist data.listennum
 				should.exist data.collectnum
+
+				writeLog("getTvNowEpg",JSON.stringify(obj))
 				done()
 
 
@@ -272,6 +296,8 @@ describe 'sstapi', ()->
 				data=obj.data
 
 				should.exist data
+
+				writeLog("getTvNowEpg",JSON.stringify(obj))
 				done()
 
 
@@ -287,6 +313,8 @@ describe 'sstapi', ()->
 				should.exist data
 				should.exist data.provinceList
 				should.exist data.categoryList
+
+				writeLog("getTvCatAndPos",JSON.stringify(obj))
 				done()
 
 	describe 'getRankingByCategoryId()',()->
@@ -303,6 +331,8 @@ describe 'sstapi', ()->
 
 				should.exist data
 				should.exist data.list
+
+				writeLog("getRankingByCategoryId",JSON.stringify(obj))
 				done()
 
 	describe 'getSpecialList()',()->
@@ -319,6 +349,8 @@ describe 'sstapi', ()->
 
 				should.exist data
 				should.exist data.list
+
+				writeLog("getSpecialList",JSON.stringify(obj))
 				done()
 
 	describe 'getSpecialAudioList()',()->
@@ -337,6 +369,8 @@ describe 'sstapi', ()->
 				should.exist data
 				should.exist data.totalCount
 				should.exist data.list
+
+				writeLog("getSpecialAudioList",JSON.stringify(obj))
 				done()
 
 
