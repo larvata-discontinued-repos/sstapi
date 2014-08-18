@@ -1,6 +1,6 @@
 sstapi
 ======
-
+ 
 [![NPM IMAGE]][NPM]
 
 a 3rd party api for [ifeng fm](http://diantai.ifeng.com/)
