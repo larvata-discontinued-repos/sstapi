@@ -6,7 +6,7 @@ sstutil = require '../lib/util'
 # testdeviceid
 api=new sstapi('363033156546107')
 
-tryTime=6000
+tryTime=15000
 
 writeLog=(filename,data)->
 	if !fs.existsSync('./log')
